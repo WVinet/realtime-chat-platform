@@ -1,73 +1,181 @@
-# React + TypeScript + Vite
+# Realtime Chat Platform
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Proyecto Full Stack desarrollado como desafío de 5 días, que permite la comunicación en tiempo real entre una aplicación web y una aplicación móvil Android, incorporando autenticación segura y un chatbot integrado.
 
-Currently, two official plugins are available:
+## Objetivo
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+Desarrollar una plataforma de mensajería en tiempo real donde usuarios autenticados puedan intercambiar mensajes entre una aplicación web y una aplicación móvil, utilizando WebSockets para comunicación instantánea.
 
-## React Compiler
+## Tecnologías
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+### Backend
 
-## Expanding the ESLint configuration
+* NestJS
+* TypeScript
+* Socket.IO
+* JWT Authentication
+* PostgreSQL
+* Prisma ORM (o TypeORM)
+* Swagger
+* Docker
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+### Frontend Web
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+* React
+* TypeScript
+* Vite
+* Axios
+* Socket.IO Client
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+### Aplicación Móvil
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+* Android
+* Kotlin
+* Retrofit
+* WebSocket Client
+* MVVM
+
+### Base de Datos
+
+* PostgreSQL
+
+## Funcionalidades
+
+### Autenticación
+
+* Registro de usuarios
+* Inicio de sesión
+* JWT Authentication
+* Protección de rutas
+
+### Chat en Tiempo Real
+
+* Comunicación Web ↔ Web
+* Comunicación Web ↔ Android
+* Comunicación Android ↔ Android
+* Mensajes instantáneos mediante WebSockets
+
+### Chatbot
+
+* Respuestas automáticas
+* Detección de comandos básicos
+* Integración con el sistema de chat
+
+### Historial
+
+* Persistencia de mensajes
+* Consulta de conversaciones anteriores
+
+## Arquitectura
+
+```text
+┌─────────────────┐
+│ React Frontend  │
+└────────┬────────┘
+         │
+         │ HTTP / WebSocket
+         │
+┌────────▼────────┐
+│     NestJS      │
+│     Backend     │
+└────────┬────────┘
+         │
+ ┌───────┼────────┐
+ │       │        │
+ │ Auth  │ Chat   │
+ │ JWT   │ Socket │
+ │       │ Bot    │
+ └───────┼────────┘
+         │
+         ▼
+   PostgreSQL
+         ▲
+         │
+         │ HTTP / WebSocket
+         │
+┌────────┴────────┐
+│ Android Kotlin  │
+└─────────────────┘
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## Estructura del Proyecto
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```text
+realtime-chat-platform/
+│
+├── backend/
+│   ├── src/
+│   ├── test/
+│   └── package.json
+│
+├── frontend/
+│   ├── src/
+│   └── package.json
+│
+├── mobile/
+│
+├── docs/
+│
+├── docker-compose.yml
+│
+└── README.md
 ```
+
+## Instalación
+
+### Backend
+
+```bash
+cd backend
+npm install
+npm run start:dev
+```
+
+### Frontend
+
+```bash
+cd frontend
+npm install
+npm run dev
+```
+
+### Android
+
+Abrir la carpeta del proyecto móvil utilizando Android Studio.
+
+## Estado del Proyecto
+
+### Día 1
+
+* [ ] Configuración del repositorio
+* [ ] Configuración Backend NestJS
+* [ ] Configuración Frontend React
+* [ ] Configuración Android Kotlin
+* [ ] Configuración PostgreSQL
+
+### Día 2
+
+* [ ] Registro de usuarios
+* [ ] Login
+* [ ] JWT
+
+### Día 3
+
+* [ ] Chat en tiempo real
+
+### Día 4
+
+* [ ] Persistencia de mensajes
+* [ ] Chatbot
+
+### Día 5
+
+* [ ] Pruebas
+* [ ] Documentación
+* [ ] Deploy local con Docker
+
+## Autor
+
+Wilfred Vinet
+Ingeniería en Informática
+Proyecto académico y de portafolio.
