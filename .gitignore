@@ -1,0 +1,31 @@
+# Node
+node_modules/
+npm-debug.log*
+
+# Env
+.env
+.env.*
+
+# Build
+dist/
+build/
+coverage/
+
+# IDE
+.idea/
+.vscode/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Android
+.gradle/
+local.properties
+*.iml
+
+# NestJS
+backend/dist/
+
+# React
+frontend/dist/
