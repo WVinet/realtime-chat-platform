@@ -6,11 +6,47 @@ datasource db {
   provider = "postgresql"
 }
 
+enum RoomType {
+  MOVIE
+  GAME
+}
+
 model User {
-  id        Int      @id @default(autoincrement())
+  id        Int       @id @default(autoincrement())
   username  String
-  email     String   @unique
+  email     String    @unique
   password  String
+
+  messages  Message[]
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+}
+
+model Room {
+  id         Int      @id @default(autoincrement())
+  externalId String
+  title      String
+  type       RoomType
+  imageUrl   String?
+
+  messages   Message[]
+
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@unique([externalId, type])
+}
+
+model Message {
+  id       Int    @id @default(autoincrement())
+  content  String
+
+  senderId Int
+  roomId   Int
+
+  sender   User   @relation(fields: [senderId], references: [id])
+  room     Room   @relation(fields: [roomId], references: [id])
+
   createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
 }
