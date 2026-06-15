@@ -4,10 +4,12 @@ import { ConfigService } from '@nestjs/config';
 
 import { ChatGateway } from './chat.gateway';
 import { MessagesModule } from '../messages/messages.module';
+import { GamesModule } from 'src/games/games.module';
 
 @Module({
   imports: [
     MessagesModule,
+    GamesModule,
     JwtModule.registerAsync({
       inject: [ConfigService],
       useFactory: (configService: ConfigService) => ({

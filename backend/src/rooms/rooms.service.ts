@@ -26,4 +26,12 @@ export class RoomsService {
       },
     });
   }
+
+  async findAllRooms() {
+    return this.prisma.room.findMany({
+      orderBy: {
+        createdAt: 'desc',
+      },
+    });
+  }
 }

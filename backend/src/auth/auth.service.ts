@@ -1,4 +1,8 @@
-import { Injectable, ConflictException } from '@nestjs/common';
+import {
+  Injectable,
+  ConflictException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 import { PrismaService } from '../prisma/prisma.service';
 import { RegisterDto } from './dto/register.dto';
@@ -54,7 +58,7 @@ export class AuthService {
     });
 
     if (!user) {
-      throw new ConflictException('Correo o contraseña incorrectos');
+      throw new UnauthorizedException('Correo o contraseña incorrectos');
     }
 
     const passwordMatch = await bcrypt.compare(
@@ -63,7 +67,7 @@ export class AuthService {
     );
 
     if (!passwordMatch) {
-      throw new ConflictException('correo o contraseña incorrecta');
+      throw new UnauthorizedException('correo o contraseña incorrecta');
     }
 
     //la informacion que ira en el token
@@ -78,6 +82,11 @@ export class AuthService {
     //retornamos el token
     return {
       access_token: accessToken,
+      user: {
+        id: user.id,
+        username: user.username,
+        email: user.email,
+      },
     };
   }
 }

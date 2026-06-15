@@ -1,4 +1,4 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Post, Get } from '@nestjs/common';
 import { RoomsService } from './rooms.service';
 import { CreateRoomDto } from './dto/create-room.dto';
 
@@ -9,5 +9,10 @@ export class RoomsController {
   @Post()
   createRoom(@Body() createRoomDto: CreateRoomDto) {
     return this.roomsService.findOrCreateRoom(createRoomDto);
+  }
+
+  @Get()
+  findAllRooms() {
+    return this.roomsService.findAllRooms();
   }
 }
