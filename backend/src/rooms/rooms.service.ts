@@ -34,4 +34,10 @@ export class RoomsService {
       },
     });
   }
+
+  async findRoomById(id: number) {
+    return this.prisma.room.findUnique({
+      where: { id },
+    });
+  }
 }

@@ -11,7 +11,11 @@ export class GamesController {
   }
 
   @Get('search')
-  searchGames(@Query('query') query: string) {
-    return this.gamesService.searchGames(query);
+  searchGames(
+    @Query('query') query: string,
+    @Query('platform') platform?: string,
+    @Query('genre') genre?: string,
+  ) {
+    return this.gamesService.searchGames(query, platform, genre);
   }
 }

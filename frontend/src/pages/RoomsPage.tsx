@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { api } from '../api/axios';
 import { useNavigate } from 'react-router-dom';
+import Navbar from '../components/Navbar';
 
 type Game = {
   id: number;
@@ -13,22 +14,26 @@ export default function RoomsPage() {
   const [games, setGames] = useState<Game[]>([]);
   const [search, setSearch] = useState('');
   const [loading, setLoading] = useState(false);
+  const [platform, setPlatform] = useState('');
+  const [genre, setGenre] = useState('');
   const navigate = useNavigate();
 
   const handleSearch = async (e: React.FormEvent) => {
-    e.preventDefault();
+  e.preventDefault();
 
-    setLoading(true);
+  setLoading(true);
 
-    const response = await api.get('/games/search', {
-      params: {
-        query: search,
-      },
-    });
+  const response = await api.get('/games/search', {
+    params: {
+      query: search,
+      platform,
+      genre,
+    },
+  });
 
-    setGames(response.data.results);
-    setLoading(false);
-  };
+  setGames(response.data.results);
+  setLoading(false);
+};
 
   const enterRoom = async (
   game: Game,
@@ -65,64 +70,88 @@ export default function RoomsPage() {
   }, []);
 
   return (
-  <main className="page">
-    <h1>GameHub</h1>
+  <>
+  <Navbar />
+  <main className="rooms-layout">
+    <header className="rooms-header">
+      <div>
+        <p className="eyebrow">Realtime Gaming Platform</p>
+        <h1>Explora juegos</h1>
+        <p>
+          Busca un juego, entra a su sala pública y conversa en tiempo real.
+        </p>
+      </div>
+    </header>
 
-    <form
-      className="search-form"
-      onSubmit={handleSearch}
-    >
-      <input
-        className="input"
-        type="text"
-        placeholder="Buscar juego..."
-        value={search}
-        onChange={(e) => setSearch(e.target.value)}
-      />
+    <section className="rooms-toolbar">
+      <form className="rooms-search" onSubmit={handleSearch}>
+        <input
+          type="text"
+          placeholder="Buscar por nombre..."
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+        />
 
-      <button
-        className="button"
-        type="submit"
-      >
-        Buscar
-      </button>
-    </form>
+        <select
+          value={platform}
+          onChange={(e) => setPlatform(e.target.value)}
+        >
+          <option value="">Plataforma</option>
+          <option value="4">PC</option>
+          <option value="187">PlayStation 5</option>
+          <option value="1">Xbox One</option>
+          <option value="7">Nintendo Switch</option>
+        </select>
+
+        <select
+          value={genre}
+          onChange={(e) => setGenre(e.target.value)}
+        >
+          <option value="">Género</option>
+          <option value="action">Action</option>
+          <option value="role-playing-games-rpg">RPG</option>
+          <option value="adventure">Adventure</option>
+          <option value="shooter">Shooter</option>
+        </select>
+
+        <button type="submit">
+          Buscar
+        </button>
+      </form>
+    </section>
 
     {loading && (
-      <p className="muted">
-        Buscando...
+      <p className="rooms-loading">
+        Buscando juegos...
       </p>
     )}
 
-    <div className="games-grid">
+    <section className="rooms-grid">
       {games.map((game) => (
-        <div
-          className="game-card"
-          key={game.id}
-        >
+        <article className="room-game-card" key={game.id}>
           <img
-            className="game-image"
             src={game.background_image}
             alt={game.name}
           />
 
-          <div className="game-content">
-            <h3>{game.name}</h3>
+          <div className="room-game-body">
+            <div>
+              <p className="game-label">Game room</p>
+              <h3>{game.name}</h3>
+            </div>
 
-            <p className="muted">
+            <p className="game-rating">
               ⭐ {game.rating}
             </p>
 
-            <button
-              className="button"
-              onClick={() => enterRoom(game)}
-            >
+            <button onClick={() => enterRoom(game)}>
               Entrar al chat
             </button>
           </div>
-        </div>
+        </article>
       ))}
-    </div>
+    </section>
   </main>
+  </>
 );
 }

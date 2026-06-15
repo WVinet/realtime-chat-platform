@@ -28,7 +28,7 @@ export class GamesService {
     return response.data;
   }
 
-  async searchGames(query: string) {
+  async searchGames(query: string, platform?: string, genre?: string) {
     const apiKey = this.configService.getOrThrow<string>('RAWG_API_KEY');
 
     const baseUrl = this.configService.getOrThrow<string>('RAWG_BASE_URL');
@@ -38,6 +38,8 @@ export class GamesService {
         params: {
           key: apiKey,
           search: query,
+          platforms: platform || undefined,
+          genres: genre || undefined,
           page_size: 20,
         },
       }),

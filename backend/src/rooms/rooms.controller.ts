@@ -1,4 +1,11 @@
-import { Body, Controller, Post, Get } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  ParseIntPipe,
+  Post,
+} from '@nestjs/common';
 import { RoomsService } from './rooms.service';
 import { CreateRoomDto } from './dto/create-room.dto';
 
@@ -14,5 +21,10 @@ export class RoomsController {
   @Get()
   findAllRooms() {
     return this.roomsService.findAllRooms();
+  }
+
+  @Get(':id')
+  findRoomById(@Param('id', ParseIntPipe) id: number) {
+    return this.roomsService.findRoomById(id);
   }
 }
