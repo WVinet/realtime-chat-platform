@@ -57,10 +57,12 @@ export class GamesService {
 
     return {
       id: game.id,
+      slug: game.slug,
       name: game.name,
       rating: game.rating,
       released: game.released,
       imageUrl: game.background_image,
+      rawgUrl: `https://rawg.io/games/${game.slug}`,
       platforms:
         game.parent_platforms?.map((item) => item.platform.name).join(', ') ??
         'Sin plataformas',

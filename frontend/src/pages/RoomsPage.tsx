@@ -65,40 +65,64 @@ export default function RoomsPage() {
   }, []);
 
   return (
-    <div>
-      <h1>Juegos Populares</h1>
+  <main className="page">
+    <h1>GameHub</h1>
 
-      <form onSubmit={handleSearch}>
-        <input
-          type="text"
-          placeholder="Buscar juego..."
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-        />
+    <form
+      className="search-form"
+      onSubmit={handleSearch}
+    >
+      <input
+        className="input"
+        type="text"
+        placeholder="Buscar juego..."
+        value={search}
+        onChange={(e) => setSearch(e.target.value)}
+      />
 
-        <button type="submit">Buscar</button>
-      </form>
+      <button
+        className="button"
+        type="submit"
+      >
+        Buscar
+      </button>
+    </form>
 
-      {loading && <p>Buscando...</p>}
+    {loading && (
+      <p className="muted">
+        Buscando...
+      </p>
+    )}
 
+    <div className="games-grid">
       {games.map((game) => (
-        <div key={game.id}>
+        <div
+          className="game-card"
+          key={game.id}
+        >
           <img
+            className="game-image"
             src={game.background_image}
             alt={game.name}
-            width={250}
           />
 
-          <h3>{game.name}</h3>
-          <p>⭐ {game.rating}</p>
-          
-          <button
-            onClick={() => enterRoom(game)}
-          >
-            Entrar al chat
-          </button>
+          <div className="game-content">
+            <h3>{game.name}</h3>
+
+            <p className="muted">
+              ⭐ {game.rating}
+            </p>
+
+            <button
+              className="button"
+              onClick={() => enterRoom(game)}
+            >
+              Entrar al chat
+            </button>
+          </div>
         </div>
       ))}
     </div>
-  );
+  </main>
+);
 }

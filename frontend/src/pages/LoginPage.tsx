@@ -7,6 +7,8 @@ export default function LoginPage(){
     const navigate = useNavigate();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [isRegistering, setIsRegistering] = useState(false);
+    const [username, setUsername] = useState('');
     const handleSubmit = async (
         e: React.FormEvent,
     ) => {
@@ -41,22 +43,116 @@ export default function LoginPage(){
         
         
     }
+    const handleRegister = async (e: React.FormEvent) => {
+        e.preventDefault();
 
-    return <div>
-        <h1>Login</h1>
+        try {
+            await api.post('/auth/register', {
+            username,
+            email,
+            password,
+            });
 
-        <form onSubmit={handleSubmit}>
-            <input 
-                type="email" 
-                placeholder="Correo"
-                value= {email}
-                onChange={(e) => setEmail(e.target.value)} />
-            <input 
-            type="password" 
+            setIsRegistering(false);
+        } catch (error) {
+            console.error(error);
+        }
+        };
+
+    return (
+  <main className="login-layout">
+    <section className="login-hero">
+      <p className="eyebrow">Realtime Gaming Platform</p>
+      <h1>GameHub</h1>
+      <p>
+        Encuentra juegos, entra a salas públicas y conversa en tiempo real.
+      </p>
+    </section>
+
+    <section
+      className={
+        isRegistering
+          ? 'auth-split register-active'
+          : 'auth-split login-active'
+      }
+    >
+      <section className="auth-card-panel login-panel"
+                onClick={() => isRegistering && setIsRegistering(false)}>
+        <h2>Bienvenido</h2>
+        <p>Ingresa para continuar</p>
+
+        <form className="login-form" onSubmit={handleSubmit}>
+          <input
+            type="email"
+            placeholder="Correo"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
+
+          <input
+            type="password"
             placeholder="Contraseña"
-            value= {password}
-            onChange={(e) => setPassword(e.target.value)} />
-            <button type="submit"> Ingresar  </button>
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
+
+          <button type="submit">Ingresar</button>
         </form>
-    </div>
+
+        <p className="auth-switch">
+          ¿No tienes cuenta?{' '}
+          <button
+            type="button"
+            onClick={() => setIsRegistering(true)}
+          >
+            Regístrate
+          </button>
+        </p>
+
+      </section>
+
+      <section className="auth-card-panel register-panel"
+                onClick={() => !isRegistering && setIsRegistering(true)}>
+        <h2>Crear cuenta</h2>
+        <p>Elige tu username gamer</p>
+
+        <form className="login-form" onSubmit={handleRegister}>
+          <input
+            type="text"
+            placeholder="Username"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+          />
+
+          <input
+            type="email"
+            placeholder="Correo"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
+
+          <input
+            type="password"
+            placeholder="Contraseña"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
+
+          <button type="submit">Crear cuenta</button>
+        </form>
+
+        <p className="auth-switch">
+          ¿Ya tienes cuenta?{' '}
+          <button
+            type="button"
+            onClick={() => setIsRegistering(false)}
+          >
+            Inicia sesión
+          </button>
+        </p>
+
+      </section>
+    </section>
+  </main>
+);
 }

@@ -7,6 +7,8 @@ type Message = {
   id: number;
   content: string;
   createdAt: string;
+  imageUrl?: string;
+  gameUrl?: string;
   sender: {
     id: number;
     username: string;
@@ -84,35 +86,116 @@ export default function ChatPage() {
   };
 
   return (
-    <div>
-      <h1>Chat</h1>
-      <p>Room ID: {roomId}</p>
+  <main className="page chat-page">
+    <section className="chat-shell">
+      <aside className="chat-sidebar card">
+        <h2>GameHub</h2>
 
-      <p>Usuarios activos: {activeUsers.length}</p>
+        <p className="muted">
+          Sala #{roomId}
+        </p>
 
-      <ul>
-        {activeUsers.map((user) => (
-          <li key={user}>{user}</li>
-        ))}
-      </ul>
+        <div className="active-box">
+          <strong>
+            Usuarios activos: {activeUsers.length}
+          </strong>
 
-      {messages.map((message) => (
-        <div key={message.id}>
-          <strong>{message.sender.username}</strong>
-          <p>{message.content}</p>
+          <ul>
+            {activeUsers.map((user) => (
+              <li key={user}>{user}</li>
+            ))}
+          </ul>
         </div>
-      ))}
 
-      <form onSubmit={sendMessage}>
-        <input
-          type="text"
-          placeholder="Escribe un mensaje..."
-          value={message}
-          onChange={(e) => setMessage(e.target.value)}
-        />
+        <p className="muted">
+          Usa <strong>!bot buscar elden ring</strong>
+        </p>
+      </aside>
 
-        <button type="submit">Enviar</button>
-      </form>
+      <section className="chat-panel card">
+        <header className="chat-header">
+          <div>
+            <p className="muted">Chat en vivo</p>
+            <h1>Sala de juego</h1>
+          </div>
+        </header>
+
+        <div className="messages-box">
+          {messages.map((msg) => {
+  const currentUsername =
+    localStorage.getItem('username');
+
+  const isMine =
+    msg.sender.username === currentUsername;
+
+  const isBot =
+    msg.sender.username === 'GameBot';
+
+    
+
+  return (
+    <div
+      key={msg.id}
+      className={
+        isBot
+          ? 'message-row bot'
+          : isMine
+            ? 'message-row mine'
+            : 'message-row other'
+      }
+    >
+      <div className="message-bubble">
+  <strong>{msg.sender.username}</strong>
+
+  {msg.imageUrl && (
+    <img
+      className="bot-game-image"
+      src={msg.imageUrl}
+      alt="Juego recomendado"
+    />
+  )}
+
+  <p>{msg.content}</p>
+
+  {msg.gameUrl && (
+    <a
+      className="bot-link"
+      href={msg.gameUrl}
+      target="_blank"
+      rel="noreferrer"
+    >
+      Ver información completa
+    </a>
+  )}
+</div>
     </div>
   );
+})}
+        </div>
+
+        <form
+          className="message-form"
+          onSubmit={sendMessage}
+        >
+          <input
+            className="input"
+            type="text"
+            placeholder="Escribe un mensaje o usa !bot buscar..."
+            value={message}
+            onChange={(e) =>
+              setMessage(e.target.value)
+            }
+          />
+
+          <button
+            className="button"
+            type="submit"
+          >
+            Enviar
+          </button>
+        </form>
+      </section>
+    </section>
+  </main>
+);
 }

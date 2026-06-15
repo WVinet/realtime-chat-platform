@@ -105,28 +105,34 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
       const game = await this.gamesService.searchFirstGame(search);
 
-      const botResponse = !game
-        ? '❌ No encontré ningún juego.'
-        : `🎮 ${game.name}\n` +
-          `⭐ Rating: ${game.rating}\n` +
-          `📅 Lanzamiento: ${game.released}\n` +
-          `🖥️ Plataformas: ${game.platforms}\n` +
-          `🏷️ Géneros: ${game.genres}`;
+      if (!game) {
+        const botMessage = await this.messagesService.createMessage(
+          payload.roomId,
+          3,
+          '❌ No encontré ningún juego.',
+        );
 
-      this.server.to(roomName).emit('new_message', {
-        id: Date.now(),
-        content: botResponse,
-        createdAt: new Date(),
-        sender: {
-          id: 0,
-          username: 'GameBot',
-        },
-      });
+        this.server.to(roomName).emit('new_message', botMessage);
+
+        return;
+      }
+
+      const content =
+        `🎮 ${game.name}\n` +
+        `⭐ Rating: ${game.rating}\n` +
+        `📅 Lanzamiento: ${game.released}\n` +
+        `🖥️ Plataformas: ${game.platforms}\n` +
+        `🏷️ Géneros: ${game.genres}`;
+
+      const botMessage = await this.messagesService.createMessage(
+        payload.roomId,
+        3,
+        content,
+        game.imageUrl,
+        game.rawgUrl,
+      );
+
+      this.server.to(roomName).emit('new_message', botMessage);
     }
-
-    return {
-      event: 'new_message',
-      data: savedUserMessage,
-    };
   }
 }

@@ -5,12 +5,20 @@ import { PrismaService } from '../prisma/prisma.service';
 export class MessagesService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async createMessage(roomId: number, senderId: number, content: string) {
+  async createMessage(
+    roomId: number,
+    senderId: number,
+    content: string,
+    imageUrl?: string,
+    gameUrl?: string,
+  ) {
     return this.prisma.message.create({
       data: {
         roomId,
         senderId,
         content,
+        imageUrl,
+        gameUrl,
       },
       include: {
         sender: {

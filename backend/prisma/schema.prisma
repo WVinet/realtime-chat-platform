@@ -48,5 +48,8 @@ model Message {
   sender   User   @relation(fields: [senderId], references: [id])
   room     Room   @relation(fields: [roomId], references: [id])
 
+  imageUrl String?
+  gameUrl String?
+
   createdAt DateTime @default(now())
 }
